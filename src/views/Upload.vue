@@ -1,173 +1,155 @@
 <template>
   <div class="content">
-    <transition
-      name="fade"
-      leave-active-class="animated fadeOut"
-      enter-active-class="animated fadeIn"
-      :duration="500"
-      mode="out-in"
-    >
-      <div key="div1" v-if="configParam.length==0" class="upload_div">
-        <div :class="{'blur':uploading}">
-          <br>
-          <br>
-          <a-form :form="form" @submit="handleSubmit">
-            <a-form-item label="标题" v-bind="formItemLayout">
-              <a-input
-                v-decorator="[
+    <div :class="{'blur':uploading}">
+      <br>
+      <br>
+      <a-form :form="form" @submit="handleSubmit">
+        <a-form-item label="标题" v-bind="formItemLayout">
+          <a-input
+            v-decorator="[
           'title',
           {rules: [{ required: true, message: '请输入课程标题' }]}
         ]"
-              />
-            </a-form-item>
-            <a-form-item label="描述" v-bind="formItemLayout">
-              <a-textarea
-                :autosize="{ minRows: 4, maxRows: 10 }"
-                v-decorator="[
+          />
+        </a-form-item>
+        <a-form-item label="描述" v-bind="formItemLayout">
+          <a-textarea
+            :autosize="{ minRows: 4, maxRows: 10 }"
+            v-decorator="[
           'description',
           {rules: [{ required: true, message: '请输入课程描述' }]}
         ]"
-              />
-            </a-form-item>
-            <a-form-item label="年级" v-bind="formItemLayout">
-              <a-select
-                v-decorator="[
+          />
+        </a-form-item>
+        <a-form-item label="年级" v-bind="formItemLayout">
+          <a-select
+            v-decorator="[
           'grade',
           {rules: [{ required: true, message: '请选择对应年级' }]}
         ]"
-                placeholder="年级"
-                @change="handleSelectChange"
-              >
-                <a-select-opt-group>
-                  <span slot="label">
-                    <span style="color:blue">高中</span>
-                  </span>
-                  <a-select-option value="1">高一</a-select-option>
-                  <a-select-option value="2">高二</a-select-option>
-                  <a-select-option value="3">高三</a-select-option>
-                </a-select-opt-group>
-                <a-select-opt-group>
-                  <span slot="label">
-                    <span style="color:green">初中</span>
-                  </span>
-                  <a-select-option value="4">初一</a-select-option>
-                  <a-select-option value="5">初二</a-select-option>
-                  <a-select-option value="6">初三</a-select-option>
-                </a-select-opt-group>
-                <a-select-opt-group>
-                  <span slot="label">
-                    <span>其他</span>
-                  </span>
-                  <a-select-option value="0">未分类</a-select-option>
-                </a-select-opt-group>
-              </a-select>
-            </a-form-item>
-            <a-form-item label="标签" v-bind="formItemLayout">
-              <template v-for="(tag, index) in tags">
-                <a-tooltip v-if="tag.length > 20" :key="'tag'+index" :title="tag">
-                  <a-tag
-                    :key="tag"
-                    :closable="true"
-                    :afterClose="() => handleClose(tag)"
-                  >{{`${tag.slice(0, 20)}...`}}</a-tag>
-                </a-tooltip>
-                <a-tag
-                  v-else
-                  :key="tag"
-                  :closable="true"
-                  :afterClose="() => handleClose(tag)"
-                >{{tag}}</a-tag>
-              </template>
-              <a-input
-                v-if="inputVisible"
-                ref="input"
-                type="text"
-                size="small"
-                :style="{ width: '78px' }"
-                :value="inputValue"
-                @change="handleInputChange"
-                @blur="handleInputConfirm"
-                @keyup.enter="handleInputConfirm"
-              />
-              <a-tag v-else @click="showInput" style="background: #fff; borderStyle: dashed;">
-                <a-icon type="plus"/>New Tag
-              </a-tag>
-            </a-form-item>
-            <a-form-item v-bind="formItemLayout" label="添加课程" class="courseUploadItem">
-              <a-upload
-                v-decorator="[
+            placeholder="年级"
+            @change="handleSelectChange"
+          >
+            <a-select-opt-group>
+              <span slot="label">
+                <span style="color:blue">高中</span>
+              </span>
+              <a-select-option value="1">高一</a-select-option>
+              <a-select-option value="2">高二</a-select-option>
+              <a-select-option value="3">高三</a-select-option>
+            </a-select-opt-group>
+            <a-select-opt-group>
+              <span slot="label">
+                <span style="color:green">初中</span>
+              </span>
+              <a-select-option value="4">初一</a-select-option>
+              <a-select-option value="5">初二</a-select-option>
+              <a-select-option value="6">初三</a-select-option>
+            </a-select-opt-group>
+            <a-select-opt-group>
+              <span slot="label">
+                <span>其他</span>
+              </span>
+              <a-select-option value="0">未分类</a-select-option>
+            </a-select-opt-group>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="标签" v-bind="formItemLayout">
+          <template v-for="(tag, index) in tags">
+            <a-tooltip v-if="tag.length > 20" :key="'tag'+index" :title="tag">
+              <a-tag
+                :key="tag"
+                :closable="true"
+                :afterClose="() => handleClose(tag)"
+              >{{`${tag.slice(0, 20)}...`}}</a-tag>
+            </a-tooltip>
+            <a-tag v-else :key="tag" :closable="true" :afterClose="() => handleClose(tag)">{{tag}}</a-tag>
+          </template>
+          <a-input
+            v-if="inputVisible"
+            ref="input"
+            type="text"
+            size="small"
+            :style="{ width: '78px' }"
+            :value="inputValue"
+            @change="handleInputChange"
+            @blur="handleInputConfirm"
+            @keyup.enter="handleInputConfirm"
+          />
+          <a-tag v-else @click="showInput" style="background: #fff; borderStyle: dashed;">
+            <a-icon type="plus"/>New Tag
+          </a-tag>
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="添加课程" class="courseUploadItem">
+          <a-upload
+            v-decorator="[
           'course',
           {rules: [{ required: true, message: '请选择课程文件' }]}
         ]"
-                listType="text"
-                :remove="courseRemoveHandler"
-                :fileList="courseFile"
-                @change="handleUploadChange"
-                :beforeUpload="beforeCourseUpload"
-              >
-                <a-button :disabled="courseStatus">
-                  <a-icon type="upload"/>选择
-                </a-button>
-              </a-upload>
-            </a-form-item>
-            <a-form-item v-bind="formItemLayout" label="添加附件">
-              <a-upload
-                v-decorator="[
+            listType="text"
+            :remove="courseRemoveHandler"
+            :fileList="courseFile"
+            @change="handleUploadChange"
+            :beforeUpload="beforeCourseUpload"
+          >
+            <a-button :disabled="courseStatus">
+              <a-icon type="upload"/>选择
+            </a-button>
+          </a-upload>
+        </a-form-item>
+        <a-form-item v-bind="formItemLayout" label="添加附件">
+          <a-upload
+            v-decorator="[
           'attachment'
         ]"
-                :multiple="true"
-                listType="text"
-                :remove="attachmentRemoveHandler"
-                :fileList="fileList"
-                @change="handleUploadChange"
-                :beforeUpload="beforeAttachmentUpload"
-              >
-                <a-button>
-                  <a-icon type="upload"/>选择
-                </a-button>
-              </a-upload>
-            </a-form-item>
-            <a-form-item :wrapper-col="{ span: 14, offset: 6 }">
-              <a-button type="primary" html-type="submit" ref="submit">提交</a-button>
-              <a-button type="danger" style="margin-left:50px" @click="backToIndex">返回</a-button>
-            </a-form-item>
-          </a-form>
-        </div>
-        <transition
-          name="fade"
-          enter-active-class="animated fadeIn"
-          leave-active-class="animated fadeOut"
-        >
-          <div v-show="uploading" class="uploading">
-            <div class="progress">
-              <a-progress type="circle" :percent="percent" :status="uploadingStatus"/>
-              <div style="margin-top:20px;font-size:18px" v-html="uploadingTips"></div>
-              <div class="btn" style="margin-top:20px">
-                <a-button
-                  type="default"
-                  @click="retryBtn"
-                  :disabled="uploadingStatus=='normal'||uploadingStatus=='success'"
-                >重试</a-button>
-                <a-button
-                  v-if="uploadingStatus!='normal'"
-                  :disabled="uploadingStatus=='success'"
-                  type="danger"
-                  style="margin-left:20px"
-                  @click="backUpload"
-                >返回</a-button>
-                <a-button
-                  v-else-if="isUploadingFile"
-                  type="danger"
-                  style="margin-left:20px"
-                  @click="cancelUpload"
-                >取消</a-button>
-              </div>
-            </div>
+            :multiple="true"
+            listType="text"
+            :remove="attachmentRemoveHandler"
+            :fileList="fileList"
+            @change="handleUploadChange"
+            :beforeUpload="beforeAttachmentUpload"
+          >
+            <a-button>
+              <a-icon type="upload"/>选择
+            </a-button>
+          </a-upload>
+        </a-form-item>
+        <a-form-item :wrapper-col="{ span: 14, offset: 6 }">
+          <a-button type="primary" html-type="submit" ref="submit">提交</a-button>
+          <a-button type="danger" style="margin-left:50px" @click="backToIndex">返回</a-button>
+        </a-form-item>
+      </a-form>
+    </div>
+    <transition
+      name="fade"
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
+    >
+      <div v-show="uploading" class="uploading">
+        <div class="progress">
+          <a-progress type="circle" :percent="percent" :status="uploadingStatus"/>
+          <div style="margin-top:20px;font-size:18px" v-html="uploadingTips"></div>
+          <div class="btn" style="margin-top:20px">
+            <a-button
+              type="default"
+              @click="retryBtn"
+              :disabled="uploadingStatus=='normal'||uploadingStatus=='success'"
+            >重试</a-button>
+            <a-button
+              v-if="uploadingStatus!='normal'"
+              :disabled="uploadingStatus=='success'"
+              type="danger"
+              style="margin-left:20px"
+              @click="backUpload"
+            >返回</a-button>
+            <a-button
+              v-else-if="isUploadingFile"
+              type="danger"
+              style="margin-left:20px"
+              @click="cancelUpload"
+            >取消</a-button>
           </div>
-        </transition>
-      </div>
-      <div key="div2" v-else class="config">
-        <CourseConfig :data="configParam"></CourseConfig>
+        </div>
       </div>
     </transition>
   </div>
@@ -175,7 +157,7 @@
 
 <script>
 import { setTimeout } from "timers";
-import CourseConfig from "../components/CourseConfig";
+import { userInfo } from "os";
 export default {
   data() {
     return {
@@ -197,7 +179,6 @@ export default {
       uploadingTips: '<a-icon type="loading"/>&nbsp;&nbsp;&nbsp;正在上传...',
       source: null, //取消上传
       isUploadingFile: false,
-      configParam: "" //传递到配置页面的参数
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -247,11 +228,6 @@ export default {
     handleSubmit(e) {
       let vm = this;
       e.preventDefault();
-      this.configParam = JSON.stringify({
-                
-      });
-
-      return;
       this.form.validateFields(async (err, values) => {
         if (!err) {
           this.uploading = true;
@@ -404,9 +380,6 @@ export default {
       }
     }
   },
-  components: {
-    CourseConfig
-  }
 };
 </script>
 <style scoped>

@@ -46,7 +46,7 @@ export default {
 <style lang="scss" scoped>
 $line-height: 72px;
 .content {
-  min-width: 1000px;
+  min-width: 1200px;
   .nav_and_carousel {
     margin-top: 30px;
     box-shadow: 0 2px 8px 0 rgba(7, 17, 27, 0.06);

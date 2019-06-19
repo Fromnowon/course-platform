@@ -77,15 +77,15 @@ export default {
 <style scoped>
 .content {
   position: relative;
-  width: 1000px;
-  height: 450px;
+  width: 1200px;
+  height: 500px;
   margin: 0 auto;
   box-shadow: 0 12px 24px 0 rgba(7, 17, 27, 0.2);
 }
 .menu {
   position: relative;
   float: left;
-  width: 220px;
+  width: 300px;
   height: 100%;
   z-index: 2;
   box-sizing: border-box;
@@ -94,11 +94,11 @@ export default {
   font-weight: 400;
 }
 .menu .item {
-  height: 60px;
-  line-height: 60px;
-  font-size: 14px;
+  height: 80px;
+  line-height: 80px;
+  font-size: 15px;
   cursor: pointer;
-  padding-left: 12px;
+  padding-left: 50px;
   position: relative;
 }
 .menu .item:hover {
@@ -119,13 +119,13 @@ export default {
 .carousel {
   position: relative;
   z-index: 2;
-  width: 780px;
+  width: 900px;
   float: left;
 }
 .ant-carousel >>> .slick-slide {
   text-align: center;
-  height: 450px;
-  line-height: 450px;
+  height: 500px;
+  line-height: 500px;
   background: #364d79;
   overflow: hidden;
 }
